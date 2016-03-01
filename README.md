@@ -4,6 +4,13 @@ In PHP7 this E_STRICT error has been promoted to E_WARNING.
 
 For comprehensive migration scanner see https://github.com/sstalle/php7cc
 
+Installation
+------------
+Checkout and run composer:
+```
+composer install
+```
+
 Usage
 -----
 ```
