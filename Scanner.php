@@ -41,6 +41,7 @@ class Scanner
     {
         echo PHP_EOL . 'Building hierarchy...' . PHP_EOL;
         $trees = array();
+        $classMap = array();
         foreach ($classes as $class) {
             $node = new Tree\Node\Node($class);
             foreach ($trees as $key => $treeRoot) {
@@ -54,24 +55,27 @@ class Scanner
                 $trees[] = $node;
             } else {
                 $found = false;
-                foreach ($trees as $treeRoot) {
-                    $visitor = new Tree\Visitor\PreOrderVisitor();
-                    $yield = $treeRoot->accept($visitor);
-                    foreach ($yield as $searchNode) {
-                        if ($searchNode->getValue()->name == $class->extends->parts[0]) {
-                            $searchNode->addChild($node);
-                            $found = true;
+                if (array_search($class->extends->parts[0], $classMap)) {
+                    foreach ($trees as $treeRoot) {
+                        $visitor = new Tree\Visitor\PreOrderVisitor();
+                        $yield = $treeRoot->accept($visitor);
+                        foreach ($yield as $searchNode) {
+                            if ($searchNode->getValue()->name == $class->extends->parts[0]) {
+                                $searchNode->addChild($node);
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if ($found) {
                             break;
                         }
-                    }
-                    if ($found) {
-                        break;
                     }
                 }
                 if (!$found) {
                     $trees[] = $node;
                 }
             }
+            $classMap[] = $class->name;
             echo '.';
         }
         return $trees;
