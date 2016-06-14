@@ -26,6 +26,9 @@ class Scanner
         $files = new RegexIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)), '/.php$/');
         foreach ($files as $file) {
             $code = file_get_contents($file);
+            if (stripos($code, 'class') === false) {
+                continue;
+            }
             try {
                 $stmts = $parser->parse($code);
                 $stmts = $traverser->traverse($stmts);
