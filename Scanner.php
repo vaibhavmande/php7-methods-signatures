@@ -48,7 +48,6 @@ class Scanner
                 if (!is_null($treeRoot->getValue()->extends) && $treeRoot->getValue()->extends->parts[0] == $class->name) {
                     $node->addChild($treeRoot);
                     unset($trees[$key]);
-                    break;
                 }
             }
             if (is_null($class->extends)) {
