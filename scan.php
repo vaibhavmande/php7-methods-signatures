@@ -10,3 +10,4 @@ if (empty($path)) {
 
 $scanner = new Scanner();
 $scanner->scan($path);
+echo PHP_EOL . 'Done' . PHP_EOL;
