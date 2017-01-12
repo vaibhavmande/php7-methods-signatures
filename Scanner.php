@@ -106,7 +106,7 @@ class Scanner
         }
         $currentNode = $node;
         $found = false;
-        
+
         while (!$found && ($currentNode = $currentNode->getParent())) {
             $methods = $currentNode->getValue()->getMethods();
             foreach ($methods as $parentMethod) {
@@ -129,6 +129,7 @@ class Scanner
                             ]);   
                         }
                         echo PHP_EOL . $consoleTable->getTable();
+                        echo 'Result: ' . $result . PHP_EOL;
                     }
                     $found = true;
                     break;
