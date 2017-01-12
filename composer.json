@@ -1,6 +1,7 @@
 {
     "require": {
         "nikic/php-parser": "^2.0",
-        "nicmart/tree": "^0.2.7"
+        "nicmart/tree": "^0.2.7",
+        "elkuku/console-table": "^1.0"
     }
 }

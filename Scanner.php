@@ -106,16 +106,29 @@ class Scanner
         }
         $currentNode = $node;
         $found = false;
+        
         while (!$found && ($currentNode = $currentNode->getParent())) {
             $methods = $currentNode->getValue()->getMethods();
             foreach ($methods as $parentMethod) {
                 if ($parentMethod->name == $method->name) {
                     $result = $this->compareMethods($parentMethod, $method);
                     if ($result) {
-                        $prettyPrinter = new PrettyPrinter\Standard;
-                        echo "Potential signature mismatch:\n" . $currentNode->getValue()->name . '::' . $parentMethod->name
-                            . "(\n" . $prettyPrinter->prettyPrint($parentMethod->params) . "\n)\n" . $node->getValue()->name
-                            . '::' . $method->name . "(\n" . $prettyPrinter->prettyPrint($method->params) . "\n)\n" . ' - ' . $result . PHP_EOL;
+                        $consoleTable = new Elkuku\Console\Helper\ConsoleTable;
+
+                        echo PHP_EOL . "Signature mismatch between ".$currentNode->getValue()->name.'::'.$parentMethod->name.' and '.$node->getValue()->name.'::'.$method->name . PHP_EOL;
+                        $consoleTable->setHeaders([
+                            $currentNode->getValue()->name.'::'.$parentMethod->name,
+                            $node->getValue()->name.'::'.$method->name
+                        ]);
+
+                        $maxParams = max(count($parentMethod->params), count($method->params));
+                        for($iterator=0; $iterator<=$maxParams; $iterator++) {
+                            $consoleTable->addRow([
+                                (isset($parentMethod->params[$iterator])) ? $parentMethod->params[$iterator]->name : '---',
+                                (isset($method->params[$iterator])) ? $method->params[$iterator]->name : '---'
+                            ]);   
+                        }
+                        echo PHP_EOL . $consoleTable->getTable();
                     }
                     $found = true;
                     break;
